@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Carta para Celinda</title>
+    <style>
+      /* ---------------- Basic reset ---------------- */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: radial-gradient(
+            circle at 10% 10%,
+            rgba(255, 200, 220, 0.06),
+            transparent 10%
+          ),
+          radial-gradient(
+            circle at 90% 90%,
+            rgba(200, 220, 255, 0.04),
+            transparent 10%
+          ),
+          #0b0b17;
+        color: #f8f7fb;
+        overflow: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* ---------------- Layout ---------------- */
+      .wrap {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem;
+        gap: 2rem;
+      }
+
+      /* ---------------- Card ---------------- */
+      .card {
+        width: 820px;
+        max-width: 95vw;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: 0 8px 30px rgba(2, 6, 23, 0.7);
+        position: relative;
+        overflow: visible;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
+      .logo {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #ffb3c6, #bcd4ff);
+        color: #0b0b17;
+        font-weight: 700;
+        font-size: 22px;
+      }
+      h1 {
+        font-size: 20px;
+        letter-spacing: 0.6px;
+      }
+      p.lead {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 14px;
+      }
+
+      /* ---------------- Cosmic heart canvas ---------------- */
+      .visual {
+        position: absolute;
+        right: -120px;
+        top: -60px;
+        width: 480px;
+        height: 480px;
+        pointer-events: none;
+        mix-blend-mode: screen;
+        opacity: 0.9;
+      }
+
+      /* ---------------- Letter ---------------- */
+      .envelope {
+        width: 100%;
+        max-width: 720px;
+        margin-top: 18px;
+        position: relative;
+        perspective: 1200px;
+      }
+      .panel {
+        width: 100%;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.03),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-radius: 12px;
+        padding: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+      }
+      .sealed {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 22px;
+        flex-direction: column;
+      }
+
+      .plate {
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 30% 30%,
+          rgba(255, 255, 255, 0.06),
+          rgba(255, 255, 255, 0.01)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      .plate h2 {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      .btn {
+        appearance: none;
+        background: #ff6b91;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 999px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(255, 107, 145, 0.15);
+        transition: transform 0.14s ease, box-shadow 0.14s ease;
+      }
+      .btn:active {
+        transform: translateY(2px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      /* ---------------- Message area ---------------- */
+      .letter {
+        margin-top: 18px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px dashed rgba(255, 255, 255, 0.03);
+        min-height: 160px;
+        position: relative;
+      }
+      .typed {
+        font-size: 18px;
+        line-height: 1.6;
+        color: #fff;
+        min-height: 130px;
+      }
+      .signature {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 14px;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 700;
+      }
+
+      /* ---------------- small controls ---------------- */
+      .controls {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .small {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        color: rgba(255, 255, 255, 0.9);
+        padding: 8px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      /* ---------------- Confetti ---------------- */
+      canvas.confetti {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      /* ---------------- Responsive tweaks ---------------- */
+      @media (max-width: 880px) {
+        .visual {
+          display: none;
+        }
+        .card {
+          padding: 18px;
+        }
+      }
+
+      /* ---------------- Subtle typographic flourish ---------------- */
+      .highlight {
+        color: #ffd3e2;
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <section class="card" aria-label="Carta interactiva para Celinda">
+        <header>
+          <div class="logo">C</div>
+          <div>
+            <h1>De Parte De tu Narcisista(Broma),leelo</h1>
+            <p class="lead">Atte: Bryan :)</p>
+          </div>
+        </header>
+
+        <div class="envelope">
+          <div class="panel sealed">
+            <div
+              class="plate"
+              role="button"
+              tabindex="0"
+              id="openBtn"
+              aria-pressed="false"
+            >
+              <svg
+                width="86"
+                height="86"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 21s-7-4.35-9-7.5C0.9 9.9 5.4 6.5 12 3c6.6 3.5 11.1 6.9 9 10.5C19 16.65 12 21 12 21z"
+                  fill="#fff"
+                  opacity="0.12"
+                />
+                <path
+                  d="M12 21s-7-4.35-9-7.5C0.9 9.9 5.4 6.5 12 3c6.6 3.5 11.1 6.9 9 10.5C19 16.65 12 21 12 21z"
+                  stroke="#ff6b91"
+                  stroke-width="0.6"
+                  fill="#ff6b91"
+                />
+              </svg>
+              <h2>Abre mi carta</h2>
+              <button class="btn" id="openBtnInner">Abrir carta</button>
+            </div>
+
+            <div
+              class="letter"
+              id="letter"
+              aria-hidden="true"
+              style="transform-origin: center; display: none"
+            >
+              <div class="typed" id="typed"></div>
+              <div class="signature">
+                Con cariño,
+                <span class="highlight" style="margin-left: 8px">Bryan</span>
+              </div>
+            </div>
+
+            <div class="controls">
+              <button class="small" id="revealBtn">Revelar todo</button>
+              <button class="small" id="againBtn">Reiniciar</button>
+              <button class="small" id="musicBtn">Reproducir música</button>
+            </div>
+          </div>
+        </div>
+
+        <canvas
+          id="cosmic"
+          class="visual"
+          width="480"
+          height="480"
+          aria-hidden="true"
+        ></canvas>
+        <canvas
+          id="c"
+          class="confetti"
+          width="1200"
+          height="800"
+          aria-hidden="true"
+        ></canvas>
+        <audio id="music" autoplay loop muted>
+          <source
+            src="https://cdn.pixabay.com/download/audio/2022/03/14/audio_2a39aea66d.mp3?filename=romantic-piano-ambient-110118.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+
+        <audio id="music" autoplay loop muted>
+          <source
+            src="https://cdn.pixabay.com/download/audio/2022/03/14/audio_2a39aea66d.mp3?filename=romantic-piano-ambient-110118.mp3"
+            type="audio/mpeg"
+          />
+        </audio>
+      </section>
+    </div>
+
+    <!-- Música opcional: descomenta y agrega un archivo .mp3 en la misma carpeta o enlaza a URL pública -->
+    <!-- <audio id="music" loop src="romantic.mp3"></audio> -->
+
+    <audio id="music" autoplay loop muted>
+      <source
+        src="https://cdn.pixabay.com/download/audio/2022/03/14/audio_2a39aea66d.mp3?filename=romantic-piano-ambient-110118.mp3"
+        type="audio/mpeg"
+      />
+    </audio>
+
+    <script>
+      /* ---------------- Setup elements ---------------- */
+      const openBtn = document.getElementById("openBtn");
+      const openBtnInner = document.getElementById("openBtnInner");
+      const letter = document.getElementById("letter");
+      const typedEl = document.getElementById("typed");
+      const revealBtn = document.getElementById("revealBtn");
+      const againBtn = document.getElementById("againBtn");
+      const musicBtn = document.getElementById("musicBtn");
+      // const music = document.getElementById('music');
+      const confCanvas = document.getElementById("c");
+      const confCtx = confCanvas.getContext("2d");
+
+      /* ---------------- The message (user-provided, exact) ---------------- */
+      const message = `Una disculpa por mi conducta pero no quiero estar distanciado contigo, mi personalidad nose como decirlo frio o directo pero yo no tengo tiempo para estar jugando quiero algo serio si quieres jugar dimelo ,sino conversemos quiero darte tu lugar y espero lo mismo no miro el pasado sino el futuro que puedo lograr.Sobre mi personalidad hare una exepcion contigo siento q despues de todo te lo mereces.`;
+
+      /* ---------------- Typing effect ---------------- */
+      let idx = 0;
+      let typingTimer = null;
+      function typeStep() {
+        if (idx <= message.length) {
+          typedEl.textContent = message.slice(0, idx) + (idx % 2 ? "|" : "");
+          idx++;
+          typingTimer = setTimeout(typeStep, 42 + Math.random() * 60);
+        } else {
+          typedEl.textContent = message; // clean cursor
+          triggerConfetti();
+        }
+      }
+
+      function revealAll() {
+        clearTimeout(typingTimer);
+        typedEl.textContent = message;
+        idx = message.length;
+        triggerConfetti();
+      }
+
+      function resetAll() {
+        clearTimeout(typingTimer);
+        idx = 0;
+        typedEl.textContent = "";
+        letter.style.display = "none";
+        // stop confetti (clear canvas)
+        confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height);
+      }
+
+      openBtn.addEventListener("click", () => openLetter());
+      openBtnInner.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openLetter();
+      });
+      openBtn.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") openLetter();
+      });
+      revealBtn.addEventListener("click", revealAll);
+      againBtn.addEventListener("click", resetAll);
+
+      function openLetter() {
+        if (letter.style.display === "block") return;
+        letter.style.display = "block";
+        letter.style.opacity = 0;
+        letter.style.transform = "translateY(10px)";
+        setTimeout(() => {
+          letter.style.transition = "all .6s cubic-bezier(.2,.9,.2,1)";
+          letter.style.opacity = 1;
+          letter.style.transform = "translateY(0)";
+        }, 60);
+        // start typing
+        setTimeout(() => {
+          typeStep();
+        }, 600);
+        // small pulse on button
+        openBtn.setAttribute("aria-pressed", "true");
+      }
+
+      /* ---------------- Simple confetti particles ---------------- */
+      let confettiParticles = [];
+      function triggerConfetti() {
+        const W = (confCanvas.width = window.innerWidth);
+        const H = (confCanvas.height = window.innerHeight);
+        confettiParticles = [];
+        const colors = ["#ff6b91", "#ffd3e2", "#bcd4ff", "#fff3b0", "#c4ffd9"];
+        for (let i = 0; i < 120; i++) {
+          confettiParticles.push({
+            x: Math.random() * W,
+            y: (Math.random() * -H) / 2,
+            vx: (Math.random() - 0.5) * 6,
+            vy: 2 + Math.random() * 6,
+            r: 6 + Math.random() * 8,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rot: Math.random() * 360,
+            rotSpeed: (Math.random() - 0.5) * 10,
+          });
+        }
+        requestAnimationFrame(confettiLoop);
+      }
+      function confettiLoop() {
+        confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height);
+        for (let p of confettiParticles) {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.rotSpeed;
+          confCtx.save();
+          confCtx.translate(p.x, p.y);
+          confCtx.rotate((p.rot * Math.PI) / 180);
+          confCtx.fillStyle = p.color;
+          confCtx.fillRect(-p.r / 2, -p.r / 2, p.r, p.r * 0.6);
+          confCtx.restore();
+        }
+        confettiParticles = confettiParticles.filter(
+          (p) => p.y < window.innerHeight + 50
+        );
+        if (confettiParticles.length > 0) requestAnimationFrame(confettiLoop);
+      }
+
+      /* ---------------- Cosmic heart (canvas animation) ---------------- */
+      const canvas = document.getElementById("cosmic");
+      const ctx = canvas.getContext("2d");
+      let particles = [];
+      function Part(x, y, size, alpha) {
+        this.x = x;
+        this.y = y;
+        this.s = size;
+        this.a = alpha;
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+      }
+      function spawnHeart() {
+        particles = [];
+        const w = canvas.width;
+        const h = canvas.height;
+        for (let i = 0; i < 200; i++) {
+          const t = (i / 200) * Math.PI * 2;
+          const x = 240 + 80 * Math.sin(t) * Math.sqrt(Math.abs(Math.cos(t)));
+          const y = 240 - 80 * Math.cos(t) * Math.sqrt(Math.abs(Math.sin(t)));
+          particles.push(
+            new Part(
+              x + (Math.random() - 0.5) * 30,
+              y + (Math.random() - 0.5) * 30,
+              1 + Math.random() * 2,
+              0.2 + Math.random() * 0.8
+            )
+          );
+        }
+      }
+      function anim() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let p of particles) {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.a *= 0.9997;
+          ctx.beginPath();
+          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.s * 6);
+          g.addColorStop(0, "rgba(255,150,185," + p.a + ")");
+          g.addColorStop(1, "rgba(120,150,255,0)");
+          ctx.fillStyle = g;
+          ctx.arc(p.x, p.y, p.s * 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        // drift
+        requestAnimationFrame(anim);
+      }
+      function resizeCanv() {
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+        spawnHeart();
+      }
+      window.addEventListener("resize", () => {
+        resizeCanv();
+        confCanvas.width = window.innerWidth;
+        confCanvas.height = window.innerHeight;
+      });
+      resizeCanv();
+      anim();
+
+      /* ---------------- Simple music play using WebAudio (soft chord) ---------------- */
+      /* ---------------- Romantic music autoplay (fade-in) ---------------- */
+      const music = document.getElementById("music");
+      let musicOn = false;
+
+      function toggleMusic() {
+        if (!musicOn) {
+          music.muted = false;
+
+          // Fade-in suave
+          music.volume = 0;
+          const fade = setInterval(() => {
+            if (music.volume < 0.45) {
+              music.volume += 0.02;
+            } else {
+              clearInterval(fade);
+            }
+          }, 120);
+
+          musicOn = true;
+          musicBtn.textContent = "Detener música";
+        } else {
+          // Fade-out suave
+          const fadeOut = setInterval(() => {
+            if (music.volume > 0.02) {
+              music.volume -= 0.02;
+            } else {
+              clearInterval(fadeOut);
+              music.volume = 0;
+              music.muted = true;
+            }
+          }, 120);
+
+          musicOn = false;
+          musicBtn.textContent = "Reproducir música";
+        }
+      }
+
+      musicBtn.addEventListener("click", toggleMusic);
+
+      /* ---------------- Accessibility: keyboard to open and reveal ---------------- */
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "o") openLetter();
+        if (e.key === "r") revealAll();
+        if (e.key === "m") toggleMusic();
+      });
+
+      /* ---------------- End: small hints for user ---------------- */
+      // Para usar: guarda este archivo como carta_celinda.html y ábrelo en tu navegador.
+      // Puedes reemplazar la variable `message` arriba si deseas editar el texto sin cambiar estilo.
+    </script>
+  </body>
+</html>
